@@ -37,7 +37,7 @@ const Create = () => {
 				...prev,
 				name: 'Please enter a valid name. It must have atleast three letters',
 			}));
-			if (!hasErrors) hasErrors = true;
+			hasErrors = true;
 		}
 
 		if (!usernameRegex.test(userData.username)) {
@@ -45,7 +45,7 @@ const Create = () => {
 				...prev,
 				username: 'Please enter a valid username. It must have atleast three letters',
 			}));
-			if (!hasErrors) hasErrors = true;
+			hasErrors = true;
 		}
 
 		if (!emailRegex.test(userData.email)) {
@@ -53,7 +53,7 @@ const Create = () => {
 				...prev,
 				email: 'Please enter a valid email. It must have atleast three letters',
 			}));
-			if (!hasErrors) hasErrors = true;
+			hasErrors = true;
 		}
 
 		if (hasErrors) return;

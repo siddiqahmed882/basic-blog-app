@@ -28,21 +28,18 @@ const userReducer = (state, action) => {
 			return { ...state, currentUser: { id: action.payload } };
 		case userReducerActions.USER_DEACTIVATE:
 			return { ...state, currentUser: null };
-		// case userReducerActions.USER_DELETE:
-		// 	return {
-		// 		...state,
-		// 		users: state.users.filter((user) => user.id !== action.payload),
-		// 		currentUser: state.currentUser?.id === action.payload ? null : state.currentUser,
-		// 	};
 		case userReducerActions.USER_CREATE:
-			console.log(action);
 			return {
 				...state,
-				// isLoading: false,
-				// isError: false,
-				// error: '',
-				// users: [...state.users, action.payload],
 				currentUser: { id: action.payload.id },
+			};
+		case userReducerActions.USER_FETCH_SUCCESS:
+			return {
+				...state,
+				isLoading: false,
+				isError: false,
+				error: '',
+				user: action.payload,
 			};
 	}
 };
@@ -53,6 +50,7 @@ const initialState = {
 	error: '',
 	currentUser: null,
 	users: [],
+	user: null,
 };
 
 const UserContent = createContext(initialState);
@@ -76,23 +74,17 @@ export const UserProvider = ({ children }) => {
 
 	const deleteUser = useCallback(async (id) => {
 		const response = await usersApi.deleteUser(id);
-		if (response.success) {
-			// dispatch({ type: userReducerActions.USER_DELETE, payload: id });
-			fetchAllUsers();
-			return;
-		}
+		if (response.success) return fetchAllUsers();
 		dispatch({ type: userReducerActions.ERROR, payload: response.data });
 	}, []);
 
 	const createUser = useCallback(async (data) => {
-		// dispatch({ type: userReducerActions.LOADING });
 		const response = await usersApi.createUser({ ...data });
 		if (response.success) {
 			await fetchAllUsers();
 			dispatch({ type: userReducerActions.USER_CREATE, payload: response.data });
 			return;
 		}
-		// dispatch({ type: userReducerActions.ERROR, payload: response.data });
 		return response.data;
 	}, []);
 
@@ -109,9 +101,29 @@ export const UserProvider = ({ children }) => {
 		return dispatch({ type: userReducerActions.ERROR, payload: response.data });
 	}, []);
 
+	const fetchUserById = useCallback(async (id) => {
+		dispatch({ type: userReducerActions.LOADING });
+
+		const response = await usersApi.fetchUserById(id);
+		if (response.success)
+			return dispatch({
+				type: userReducerActions.USER_FETCH_SUCCESS,
+				payload: response.data,
+			});
+
+		return dispatch({ type: userReducerActions.ERROR, payload: response.data });
+	}, []);
+
 	return (
 		<UserContent.Provider
-			value={{ state, activateUser, deactivateUser, deleteUser, createUser }}
+			value={{
+				state,
+				activateUser,
+				deactivateUser,
+				deleteUser,
+				createUser,
+				fetchUserById,
+			}}
 		>
 			{children}
 		</UserContent.Provider>

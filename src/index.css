@@ -242,7 +242,8 @@ textarea {
 
 /* create new user */
 
-.user-form {
+.user-form,
+.post-form {
 	max-width: 500px;
 	width: 100%;
 	margin: auto;
@@ -256,7 +257,7 @@ textarea {
 	margin-bottom: 0.25rem;
 }
 
-.input-group input {
+.input-group :is(input, textarea) {
 	padding: 0.5rem 0.75rem;
 	border: 1px solid var(--clr-neutral-400);
 	border-radius: 0.125rem;
@@ -268,11 +269,11 @@ textarea {
 	color: var(--clr-red-600);
 }
 
-.input-group input.input-error {
+.input-group .input-error {
 	border-color: var(--clr-red-500);
 }
 
-.input-group input.input-error + p {
+.input-group .input-error + p {
 	display: block;
 }
 
@@ -294,6 +295,36 @@ textarea {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
+}
+
+.post__ctas {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+.post__btn {
+	display: inline-block;
+	width: 1.5rem;
+	transition: color 250ms ease;
+}
+
+.post__btn svg {
+	width: 100%;
+	height: 100%;
+}
+
+.post__btn--edit {
+	--hover-clr: var(--clr-green-700);
+}
+
+.post__btn--delete {
+	--hover-clr: var(--clr-red-700);
+}
+
+.post__btn:hover,
+.post__btn:focus-visible {
+	color: var(--hover-clr);
 }
 
 .post__title {
