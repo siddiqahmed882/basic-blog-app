@@ -4,23 +4,22 @@ import PageHeader from '../../components/PageHeader';
 import Post from '../../components/Post';
 
 const Posts = () => {
-	const { isLoading, error, posts } = usePostConext();
+	const { isLoading, error, posts, reactionsEmojis } = usePostConext();
 
-	let content;
-
-	if (isLoading) {
-		content = <p>Loading</p>;
-	} else if (!isLoading && error.length) {
-		content = <p>{error}</p>;
-	} else if (!isLoading && !error.length) {
-		content = (
+	const content =
+		isLoading || !reactionsEmojis || !posts ? (
+			<p>Loading</p>
+		) : !isLoading && error ? (
+			<p>{error}</p>
+		) : !isLoading && posts.length === 0 ? (
+			<p>No posts to show</p>
+		) : (
 			<ul className="posts">
 				{posts.map((post) => (
 					<Post post={post} key={post.id} />
 				))}
 			</ul>
 		);
-	}
 
 	return (
 		<main className="mb-4">

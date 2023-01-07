@@ -82,16 +82,23 @@ textarea {
 	width: 100%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1rem;
+	padding: 0.75rem;
 }
 
 textarea {
 	resize: vertical;
+	min-height: 5rem;
 }
 
 .wrapper {
-	width: min(1200px, 95vw);
+	--max-width: 1200px;
+	width: min(var(--max-width), 95vw);
 	margin: 0 auto;
 	padding: 0 1rem;
+}
+
+.wrapper--narrow {
+	--max-width: 700px;
 }
 
 .btn {
@@ -165,6 +172,14 @@ textarea {
 
 .text-left {
 	text-align: left !important;
+}
+
+.mb-1 {
+	margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+	margin-bottom: 1rem;
 }
 
 .mb-4 {
@@ -277,7 +292,7 @@ textarea {
 	display: block;
 }
 
-.input-group input:focus-visible {
+.input-group :is(input, textarea):focus-visible {
 	border-color: currentColor;
 }
 
@@ -295,6 +310,23 @@ textarea {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
+}
+
+.post__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 4rem;
+}
+
+.post__meta {
+	font-size: 0.85rem;
+	font-style: italic;
+}
+
+:is(.post__owner a, .post__title a):is(:hover, :focus-visible) {
+	color: var(--clr-blue-700);
+	text-decoration: underline;
 }
 
 .post__ctas {
@@ -335,6 +367,22 @@ textarea {
 	flex-grow: 1;
 }
 
+.post__meta {
+	display: flex;
+	justify-content: space-between;
+	gap: 4rem;
+}
+
+.post__comments-count {
+	display: inline-block;
+	width: fit-content;
+}
+
+.post__reactions {
+	display: flex;
+	gap: 0.75rem;
+}
+
 .post__reaction {
 	display: inline-flex;
 	align-items: center;
@@ -343,6 +391,50 @@ textarea {
 	font-size: 1.25rem;
 }
 
-.post__reaction:not(:last-child) {
-	margin-right: 0.75rem;
+.post__reaction__btn {
+	transition: transform 200ms ease, filter 200ms ease;
+}
+
+.post__reaction__btn:disabled {
+	pointer-events: none;
+}
+
+.post__reaction__btn.greyed-out {
+	filter: grayscale(1);
+}
+
+.post__reaction__btn:is(:hover, :focus-visible) {
+	transform: scale(1.1);
+	filter: grayscale(0.5);
+}
+
+.comment-form .input-group {
+	margin-bottom: 0.5rem;
+}
+
+.comment-form .comment-area {
+	min-height: 3rem;
+}
+
+.comment-form .btn {
+	display: block;
+	width: fit-content;
+	margin-left: auto;
+}
+
+.comment {
+	border: 1px solid var(--clr-neutral-400);
+	padding: 1rem;
+	border-radius: 0.25rem;
+	margin-bottom: 0.75rem;
+	box-shadow: 5px 5px 20px 0px var(--clr-neutral-300);
+}
+
+.comment__meta {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.comment .post__btn {
+	width: 1rem;
 }

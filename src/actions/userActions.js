@@ -1,4 +1,4 @@
-export const userReducerActions = {
+const userReducerActions = {
   LOADING: 'LOADING',
   ERROR: 'ERROR',
   USERS_SUCCESS: 'USERS_SUCCESS',
@@ -8,3 +8,5 @@ export const userReducerActions = {
   USER_CREATE: "CREATE_USER",
   USER_FETCH_SUCCESS: "USER_FETCH_SUCCESS"
 };
+
+export default userReducerActions;

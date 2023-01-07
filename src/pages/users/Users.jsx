@@ -13,7 +13,6 @@ const Users = () => {
 
 	const {
 		isLoading,
-		isError,
 		error,
 		users,
 		currentUser,
@@ -32,11 +31,11 @@ const Users = () => {
 
 	let content;
 
-	if (isLoading) {
+	if (isLoading || !users) {
 		content = <p>Loading</p>;
-	} else if (!isLoading && isError) {
+	} else if (!isLoading && error) {
 		content = <p>{error}</p>;
-	} else if (!isLoading && !isError) {
+	} else if (!isLoading && !error) {
 		content = (
 			<table className="users-table">
 				<thead className="users-table__header">
@@ -47,16 +46,16 @@ const Users = () => {
 					</tr>
 				</thead>
 				<tbody className="users-table__body">
-					{users.map((user) => (
+					{Object.entries(users).map(([id, user]) => (
 						<tr className="users-table__row" key={user.id}>
 							<td className="users-table__cell text-left">
-								<Link to={`/users/${user.id}`}>{user.name}</Link>
+								<Link to={`/users/${id}`}>{user.name}</Link>
 							</td>
 
 							<td className="users-table__cell">
 								<button
 									className="btn btn-primary--inverse"
-									onClick={() => handleActivateBtnClick(user.id)}
+									onClick={() => handleActivateBtnClick(id)}
 								>
 									{user.id === currentUser?.id ? 'activated' : 'activate'}
 								</button>
@@ -65,7 +64,7 @@ const Users = () => {
 								{user.id === currentUser?.id ? (
 									<button
 										className="btn btn-danger--inverse"
-										onClick={() => deleteUser(user.id)}
+										onClick={() => deleteUser(id)}
 									>
 										Delete
 									</button>

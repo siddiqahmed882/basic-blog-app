@@ -37,18 +37,18 @@ const Create = () => {
 		if (!currentUser) navigate('/users', { state: { from: location } });
 
 		// Basic Validation
-		if (postData.title.trim().length < 20) {
+		if (postData.title.trim().length < 10) {
 			setPostDataError((prev) => ({
 				...prev,
-				title: 'Title should be atleast 20 characters long',
+				title: 'Title should be atleast 10 characters long',
 			}));
 			hasErrors = true;
 		}
 
-		if (postData.body.trim().length < 40) {
+		if (postData.body.trim().length < 20) {
 			setPostDataError((prev) => ({
 				...prev,
-				body: 'Body should be atleast 40 characters long',
+				body: 'Body should be atleast 20 characters long',
 			}));
 			hasErrors = true;
 		}

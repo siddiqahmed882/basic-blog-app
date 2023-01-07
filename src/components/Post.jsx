@@ -2,29 +2,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 import usePostContext from '../hooks/usePostContext';
 import useUserContext from '../hooks/useUserContext';
+import { Link } from 'react-router-dom';
+import ReactionBtns from './ReactionBtns';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 
-const REACTION_EMOJIS = {
-	thumbsUp: '👍',
-	wow: '😲',
-	heart: '❤',
-	rocket: '🚀',
-	coffee: '☕',
-};
+import helperFunctions from '../lib/helperFunctions';
 
 const Post = ({ post }) => {
-	const { currentUser } = useUserContext();
+	const { currentUser, users } = useUserContext();
 
-	const self = currentUser ? post.userId === currentUser.id : false;
+	const self = currentUser && post ? post.userId === currentUser.id : false;
 
 	const { deletePost } = usePostContext();
+
+	const dateTimeString = post
+		? post.updatedAt
+			? `Updated At: ${helperFunctions.formatDateForPost(post.updatedAt)}`
+			: `Created At: ${helperFunctions.formatDateForPost(post.createdAt)}`
+		: null;
 
 	return (
 		<li className="post flow">
 			{self && (
 				<div className="post__ctas">
-					<button className="post__btn post__btn--edit">
+					<Link to={`/posts/${post.id}/edit`} className="post__btn post__btn--edit">
 						<FontAwesomeIcon icon={faEdit} />
-					</button>
+					</Link>
 					<button
 						className="post__btn post__btn--delete"
 						onClick={() => deletePost(post.id, currentUser.id)}
@@ -33,14 +36,25 @@ const Post = ({ post }) => {
 					</button>
 				</div>
 			)}
-			<h2 className="post__title">{post.title}</h2>
-			<p className="post__body">{post.body.substring(0, 40)}....</p>
-			<div className="post__reactions">
-				{Object.entries(REACTION_EMOJIS).map(([key, value]) => (
-					<button className="post__reaction" key={`${post}-${key}`}>
-						{value} <span>0</span>
-					</button>
-				))}
+			<h2 className="post__title">
+				<Link to={`/posts/${post.id}`}>{post.title}</Link>
+			</h2>
+			<div className="post__meta">
+				<p className="post__owner">
+					By:{' '}
+					<Link to={`/users/${post.userId}`}>
+						{users[post.userId]?.name ?? 'Unknown'}
+					</Link>
+				</p>
+				<p>{dateTimeString}</p>
+			</div>
+			<p className="post__body">{post.body.substring(0, 100)}....</p>
+			<div className="post__meta">
+				<ReactionBtns post={post} />
+				<span className="post__comments-count">
+					<FontAwesomeIcon icon={faComment} />
+					{post?.comments}
+				</span>
 			</div>
 		</li>
 	);
